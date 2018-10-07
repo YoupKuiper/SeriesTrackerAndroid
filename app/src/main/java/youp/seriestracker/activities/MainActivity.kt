@@ -1,4 +1,4 @@
-package youp.seriestracker
+package youp.seriestracker.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,8 +6,9 @@ import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Response
 import youp.seriestracker.models.Series
-import youp.seriestracker.Services.SeriesService
+import youp.seriestracker.webservices.APIService
 import retrofit2.Callback
+import youp.seriestracker.R
 import youp.seriestracker.webservices.RetrofitClient
 
 
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity(){
 
         val retrofit = RetrofitClient.client
 
-        val service = retrofit.create(SeriesService::class.java)
+        val service = retrofit.create(APIService::class.java)
 
         val call = service.listSeries()
         call.enqueue(object : Callback<Series> {
