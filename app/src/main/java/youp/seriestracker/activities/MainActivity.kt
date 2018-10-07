@@ -22,13 +22,13 @@ class MainActivity : AppCompatActivity(){
 
         val service = retrofit.create(APIService::class.java)
 
-        val call = service.listSeries()
+        val call = service.listSeries("Better Call Saulll")
         call.enqueue(object : Callback<Series> {
             override fun onResponse(call: Call<Series>?, response: Response<Series>?) {
 
                 if (response != null && response.isSuccessful) {
-                    val atlanta = response.body()!!.body!!.name;
-                    Toast.makeText(applicationContext, atlanta, Toast.LENGTH_SHORT).show();
+                    val seriesName = response.body()!!.body!!.name;
+                    Toast.makeText(applicationContext, seriesName, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(applicationContext, "No Series Found", Toast.LENGTH_SHORT).show();
                 }
