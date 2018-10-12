@@ -8,8 +8,5 @@ class Body {
     @SerializedName("name")
     @Expose
     var name: String? = null
-    @SerializedName("name")
-    @Expose
-    var name: String? = null
 
 }

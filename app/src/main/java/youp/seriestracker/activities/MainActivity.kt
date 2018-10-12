@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(){
             override fun onResponse(call: Call<Series>?, response: Response<Series>?) {
 
                 if (response != null && response.isSuccessful) {
-                    val seriesName = response.body()!!.body!!.name;
+                    val seriesName = response.body()!!.body!!.name
                     Toast.makeText(applicationContext, seriesName, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(applicationContext, "No Series Found", Toast.LENGTH_SHORT).show();
