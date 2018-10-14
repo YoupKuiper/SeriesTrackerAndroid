@@ -10,7 +10,10 @@ import youp.seriestracker.models.Series
 
 interface APIService {
     @GET("Series/GetDetailsByName")
-    fun listSeries(@Query("name") name : String): Call<Series>
+    fun searchByName(@Query("name") name : String): Call<List<Series>>
+
+    @GET("Series")
+    fun listSeries(): Call<List<Series>>
 
     @POST("Users/Login")
     fun login(@Body user: User): Call<User>
