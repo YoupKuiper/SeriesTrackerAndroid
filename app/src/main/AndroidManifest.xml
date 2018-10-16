@@ -23,7 +23,8 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.DetailActivity" />
+        <activity android:name=".activities.DetailActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
     </application>
 
 </manifest>

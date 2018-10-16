@@ -13,7 +13,7 @@ interface APIService {
     fun searchByName(@Query("name") name : String): Call<List<Series>>
 
     @GET("Series")
-    fun listSeries(): Call<List<Series>>
+    fun listSeries(): Call<Series>
 
     @POST("Users/Login")
     fun login(@Body user: User): Call<User>
