@@ -1,18 +1,11 @@
 package youp.seriestracker.Models
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-class User {
-
-    @SerializedName("emailAddress")
-    @Expose
-    var emailAddress: String? = null
-    @SerializedName("password")
-    @Expose
-    var password: String? = null
-    @SerializedName("authToken")
-    @Expose
-    var authToken: String? = null
+@Parcelize
+class User(val emailAddress: String?, val password: String?, val authToken: String?) : Parcelable {
 
 }

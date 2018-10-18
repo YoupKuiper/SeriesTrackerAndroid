@@ -18,8 +18,7 @@ import youp.seriestracker.adapters.SeriesAdapter
 import youp.seriestracker.models.Body
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-
-
+import youp.seriestracker.models.SeriesResponse
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
                 //Go to detail activity, pass clicked item
                 val intent = Intent(applicationContext, DetailActivity::class.java).apply {
-                    putExtra("SERIES", series as Body)
+                    putExtra("SERIES", series as Series)
                 }
 
                 startActivity(intent)
@@ -46,20 +45,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         val call = service.listSeries()
-        call.enqueue(object : Callback<Series> {
-            override fun onResponse(call: Call<Series>?, response: Response<Series>?) {
+        call.enqueue(object : Callback<SeriesResponse> {
+            override fun onResponse(call: Call<SeriesResponse>?, response: Response<SeriesResponse>?) {
 
                 if (response != null && response.isSuccessful) {
-                    val seriesName = response.body()!!.body
-                    Toast.makeText(applicationContext,  response.body()!!.body!![0].name, Toast.LENGTH_SHORT).show()
-
-                    seriesList.adapter = SeriesAdapter(applicationContext, response.body()!!.body)
+                    seriesList.adapter = SeriesAdapter(applicationContext, response.body()?.series)
                 } else {
                     Toast.makeText(applicationContext, "No Series Found", Toast.LENGTH_SHORT).show();
                 }
             }
 
-            override fun onFailure(call: Call<Series>?, t: Throwable?) {
+            override fun onFailure(call: Call<SeriesResponse>?, t: Throwable?) {
                 Toast.makeText(applicationContext, t.toString(), Toast.LENGTH_LONG).show();
             }
         })

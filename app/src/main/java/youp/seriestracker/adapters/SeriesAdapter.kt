@@ -13,10 +13,11 @@ import youp.seriestracker.models.Body
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
+import youp.seriestracker.models.Series
 import java.net.URL
 
 
-internal class SeriesAdapter(var context: Context, var data: List<Body>?) : BaseAdapter() {
+internal class SeriesAdapter(var context: Context, var data: List<Series>?) : BaseAdapter() {
 
     val BASE_IMG_URL = "https://image.tmdb.org/t/p/w500"
 
@@ -49,7 +50,7 @@ internal class SeriesAdapter(var context: Context, var data: List<Body>?) : Base
         val title = vi!!.findViewById(R.id.listitem_title) as TextView
         val image = vi.findViewById(R.id.listitem_image) as ImageView
         title.text = data!![position].name
-        Picasso.get().load(BASE_IMG_URL + data!![position].imageURL).into(image)
+        Picasso.get().load(BASE_IMG_URL + data!![position].backdropPath).into(image)
 
         return vi
     }
