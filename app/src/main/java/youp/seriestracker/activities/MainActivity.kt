@@ -1,5 +1,9 @@
 package youp.seriestracker.activities
 
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -11,10 +15,17 @@ import retrofit2.Callback
 import retrofit2.Response
 import youp.seriestracker.R
 import youp.seriestracker.models.Series
+import youp.seriestracker.notificationservice.NotificationJobService
+import youp.seriestracker.notificationservice.NotificationUtils
 import youp.seriestracker.webservices.APIService
 import youp.seriestracker.webservices.RetrofitClient
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
+    private var mNotified = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +52,33 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, t.toString(), Toast.LENGTH_SHORT).show();
             }
         })
+
+        scheduleJob()
+        if (!mNotified) {
+            NotificationUtils().setNotification(mNotificationTime, this@MainActivity)
+        }
+    }
+
+    fun scheduleJob(){
+        val componentName = ComponentName(this, NotificationJobService::class.java)
+        val info = JobInfo.Builder(123, componentName)
+                .setPersisted(true)
+                .setPeriodic(5 * 1000)
+                .build()
+
+        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = jobScheduler.schedule(info)
+        if(resultCode == JobScheduler.RESULT_SUCCESS){
+            println("Job Scheduled...")
+        } else{
+            println("Job Scheduling Failed...")
+        }
+    }
+
+    fun cancelJob(){
+        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.cancel(123)
+        println("Job cancelled")
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

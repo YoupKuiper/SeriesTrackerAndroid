@@ -15,6 +15,9 @@ interface APIService {
     @GET("Series")
     fun listSeries(): Call<List<Series>>
 
+    @GET("Series/CheckForNewEpisodes")
+    fun checkForNewEpisodes(@Query("username") name : String) : Call<List<Series>>
+
     @POST("Users/Login")
     fun login(@Body user: User): Call<User>
 
