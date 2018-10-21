@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import youp.seriestracker.models.Series
+import youp.seriestracker.models.SeriesResponse
 import youp.seriestracker.webservices.APIService
 import youp.seriestracker.webservices.RetrofitClient
 
@@ -34,17 +35,17 @@ class NotificationJobService : JobService() {
             val service = retrofit.create(APIService::class.java)
 
             val call = service.checkForNewEpisodes("youpkuiper@gmail.com")
-            call.enqueue(object : Callback<List<Series>> {
-                override fun onResponse(call: Call<List<Series>>?, response: Response<List<Series>>?) {
+            call.enqueue(object : Callback<SeriesResponse> {
+                override fun onResponse(call: Call<SeriesResponse>?, response: Response<SeriesResponse>?) {
                     if (response != null && response.isSuccessful) {
-                        val seriesName = response.body()!![0].body
+                        val seriesName = response.body()?.series!![0].name
                         println(seriesName)
                     } else {
                         println("No episodes found for today")
                     }
                 }
 
-                override fun onFailure(call: Call<List<Series>>?, t: Throwable?) {
+                override fun onFailure(call: Call<SeriesResponse>?, t: Throwable?) {
                     println("Checking for new episodes failed")
                 }
             })

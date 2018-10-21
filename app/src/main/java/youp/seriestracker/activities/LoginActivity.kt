@@ -23,9 +23,7 @@ class LoginActivity : AppCompatActivity() {
         val retrofit = RetrofitClient.client
         val service = retrofit.create(APIService::class.java)
 
-        val user = User()
-        user.emailAddress = "asd"
-        user.password = "asd"
+        val user = User("asd", "asd", "asd")
         val call = service.login(user)
 
         call.enqueue(object : Callback<User> {

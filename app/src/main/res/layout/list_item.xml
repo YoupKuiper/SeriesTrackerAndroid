@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/listitem_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="@null"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         tools:background="#FF00FF" />
 
     <TextView
@@ -21,17 +22,5 @@
         android:layout_toEndOf="@id/listitem_image"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         tools:text="Listitem 1" />
-
-    <TextView
-        android:id="@+id/listitem_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/listitem_title"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/listitem_image"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        tools:text="dit is de description" />
 
 </RelativeLayout>
