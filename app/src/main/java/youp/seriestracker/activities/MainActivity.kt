@@ -12,7 +12,6 @@ import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import youp.seriestracker.R
 import youp.seriestracker.notificationservice.NotificationJobService
-import youp.seriestracker.notificationservice.NotificationUtils
 import java.util.*
 import youp.seriestracker.Fragments.HomeFragment
 import youp.seriestracker.Fragments.SearchFragment
@@ -37,10 +36,7 @@ class MainActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
 
-        scheduleJob()
-        if (!mNotified) {
-            NotificationUtils().setNotification(mNotificationTime, this@MainActivity)
-        }
+//        scheduleJob()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun scheduleJob(){
+
         val componentName = ComponentName(this, NotificationJobService::class.java)
         val info = JobInfo.Builder(123, componentName)
                 .setPersisted(true)

@@ -14,7 +14,7 @@ object RetrofitClient {
     val client: Retrofit
         get() {
 //            val baseUrl = "https://series-tracker-api.herokuapp.com/"
-            val baseUrl = "http://192.168.2.12:3000/"
+            val baseUrl = "http://192.168.2.19:3000/"
 
             if (retrofit == null) {
 
