@@ -32,13 +32,6 @@
         <service
             android:name=".notificationservice.NotificationJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <activity
-            android:name=".activities.ResultActivity"
-            android:excludeFromRecents="true"
-            android:label="notificatie"
-            android:launchMode="singleTask"
-            android:taskAffinity="" />
     </application>
 
 </manifest>

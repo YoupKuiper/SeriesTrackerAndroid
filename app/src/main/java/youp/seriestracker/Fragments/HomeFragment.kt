@@ -14,6 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import youp.seriestracker.R
 import youp.seriestracker.activities.DetailActivity
+import youp.seriestracker.activities.MainActivity
 import youp.seriestracker.adapters.SeriesAdapter
 import youp.seriestracker.models.Series
 import youp.seriestracker.models.SeriesResponse
@@ -38,6 +39,8 @@ class HomeFragment : Fragment() {
                 //Go to detail activity, pass clicked item
                 val intent = Intent(context, DetailActivity::class.java).apply {
                     putExtra("SERIES", series as Series)
+                    val activity = activity as MainActivity
+                    putIntegerArrayListExtra("MY_SERIES_IDS", activity.mySeriesIds)
                 }
 
                 startActivity(intent)
@@ -49,6 +52,8 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<SeriesResponse>?, response: Response<SeriesResponse>?) {
 
                 if (response != null && response.isSuccessful) {
+                    val mainActivity = activity as MainActivity
+                    mainActivity.mySeriesIds = response.body()?.series!!.map { s -> s.id } as ArrayList<Int>
                     seriesList.adapter = SeriesAdapter(activity!!.applicationContext, response.body()?.series)
                 } else {
                     Toast.makeText(context, "No Series Found", Toast.LENGTH_SHORT).show();
@@ -62,5 +67,9 @@ class HomeFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return rootView
+    }
+
+    fun filterSeries(searchString: String, series: List<Series>): List<Series>{
+        return series.filter { s -> s.name!!.contains(searchString) }
     }
 }

@@ -5,6 +5,7 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.app.SearchManager
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -17,11 +18,15 @@ import youp.seriestracker.Fragments.HomeFragment
 import youp.seriestracker.Fragments.SearchFragment
 import youp.seriestracker.Fragments.SettingsFragment
 import android.widget.SearchView
+import youp.seriestracker.models.Series
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private val mNotificationTime = Calendar.getInstance().timeInMillis + 5000 //Set after 5 seconds from the current time.
     private var mNotified = false
+    var mySeriesIds: ArrayList<Int> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +37,11 @@ class MainActivity : AppCompatActivity() {
 
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
-        transaction.add(R.id.container, mainFragment)
+        transaction.add(R.id.container, mainFragment, "HOME_FRAGMENT")
         transaction.addToBackStack(null)
         transaction.commit()
 
-//        scheduleJob()
+        scheduleJob()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -50,7 +55,21 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                println(s)
+                val homeFragment = supportFragmentManager.findFragmentByTag("HOME_FRAGMENT")
+                val searchFragment = supportFragmentManager.findFragmentByTag("SEARCH_FRAGMENT")
+                if(homeFragment != null && homeFragment.isVisible){
+                    // Search home fragment
+                    if(homeFragment is HomeFragment){
+//                        homeFragment.filterSeries(s)
+                    }
+
+                }else if(searchFragment != null && searchFragment.isVisible){
+                    // Search search fragment
+                    if(searchFragment is SearchFragment){
+                        searchFragment.searchSeries(s)
+                    }
+                }
+
                 searchView.clearFocus()
                 return true
             }
@@ -62,12 +81,18 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+
+
+    fun getCurrentlyVisibleFragmentTag(){
+
+    }
+
     fun scheduleJob(){
 
         val componentName = ComponentName(this, NotificationJobService::class.java)
         val info = JobInfo.Builder(123, componentName)
                 .setPersisted(true)
-                .setPeriodic(5 * 1000)
+                .setPeriodic(24 * 60 * 60 * 1000L)
                 .build()
 
         val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
@@ -88,32 +113,29 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                println("Home pressed")
                 val mainFragment = HomeFragment()
 
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(R.id.container, mainFragment)
+                transaction.replace(R.id.container, mainFragment, "HOME_FRAGMENT")
                 transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                println("Search pressed")
                 val searchFragment = SearchFragment()
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(R.id.container, searchFragment)
+                transaction.replace(R.id.container, searchFragment, "SEARCH_FRAGMENT")
                 transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                println("Settings pressed")
                 val settingsFragment = SettingsFragment()
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(R.id.container, settingsFragment)
+                transaction.replace(R.id.container, settingsFragment, "SETTINGS_FRAGMENT")
                 transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true

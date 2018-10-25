@@ -45,7 +45,7 @@ class NotificationJobService : JobService() {
             val call = service.checkForNewEpisodes("youpkuiper@gmail.com")
             call.enqueue(object : Callback<SeriesResponse> {
                 override fun onResponse(call: Call<SeriesResponse>?, response: Response<SeriesResponse>?) {
-                    if (response != null && response.isSuccessful) {
+                    if (response != null && response.isSuccessful && response.body()?.series!!.isNotEmpty()) {
                         val seriesName = response.body()?.series!![0].name
                         println(seriesName)
 
