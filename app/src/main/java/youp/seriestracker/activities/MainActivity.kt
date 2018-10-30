@@ -18,8 +18,11 @@ import youp.seriestracker.Fragments.HomeFragment
 import youp.seriestracker.Fragments.SearchFragment
 import youp.seriestracker.Fragments.SettingsFragment
 import android.widget.SearchView
-import youp.seriestracker.models.Series
 import kotlin.collections.ArrayList
+import youp.seriestracker.notificationservice.DemoJobCreator
+import com.evernote.android.job.JobManager
+import youp.seriestracker.notificationservice.MyDailyJob
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +44,8 @@ class MainActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
 
-        scheduleJob()
+        JobManager.create(this).addJobCreator(DemoJobCreator())
+        MyDailyJob.schedule()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
