@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MainActivity"
+            android:theme="@style/SplashTheme"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,9 +30,6 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.DetailActivity"
             android:theme="@android:style/Theme.NoTitleBar"/>
-        <service
-            android:name=".notificationservice.NotificationJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

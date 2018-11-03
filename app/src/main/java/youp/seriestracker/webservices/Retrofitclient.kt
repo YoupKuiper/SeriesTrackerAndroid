@@ -1,12 +1,9 @@
 package youp.seriestracker.webservices
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.xml.datatype.DatatypeConstants.SECONDS
-import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 
@@ -17,8 +14,9 @@ object RetrofitClient {
 
     val client: Retrofit
         get() {
-            val baseUrl = "https://series-tracker-api.herokuapp.com/"
+//            val baseUrl = "https://series-tracker-api.herokuapp.com/"
 //            val baseUrl = "http://192.168.2.8:3000/"
+            val baseUrl = "https://api.themoviedb.org/3/"
 
             if (retrofit == null) {
 

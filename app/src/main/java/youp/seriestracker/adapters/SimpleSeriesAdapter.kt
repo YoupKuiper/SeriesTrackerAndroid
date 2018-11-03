@@ -9,10 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import youp.seriestracker.R
-import youp.seriestracker.models.Series
+import youp.seriestracker.models.SimpleSeries
 
-
-internal class SeriesAdapter(var context: Context, var data: List<Series>?) : BaseAdapter() {
+class SimpleSeriesAdapter(var context: Context, var data: List<SimpleSeries>?) : BaseAdapter() {
 
     val BASE_IMG_URL = "https://image.tmdb.org/t/p/w500"
 

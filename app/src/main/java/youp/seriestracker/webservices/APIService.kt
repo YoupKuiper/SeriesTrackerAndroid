@@ -5,10 +5,16 @@ import retrofit2.http.*
 import youp.seriestracker.Models.User
 import youp.seriestracker.models.Series
 import youp.seriestracker.models.SeriesResponse
+import youp.seriestracker.models.SimpleSeries
+import youp.seriestracker.models.SimpleSeriesResponse
 
 interface APIService {
-    @GET("Series/GetDetailsByName")
-    fun searchByName(@Query("name") name : String): Call<SeriesResponse>
+
+    @GET("search/tv")
+    fun searchByName(@Query("api_key") apiKey: String, @Query("query",encoded = true) query: String) : Call<SimpleSeriesResponse>
+
+//    @GET("Series/GetDetailsByName")
+//    fun searchByName(@Query("name") name : String): Call<SeriesResponse>
 
     @GET("Series")
     fun listSeries(): Call<SeriesResponse>
@@ -16,8 +22,11 @@ interface APIService {
     @GET("Series/CheckForNewEpisodes")
     fun checkForNewEpisodes(@Query("username") name : String) : Call<SeriesResponse>
 
+    @GET("tv/{id}")
+    fun getDetailsById(@Path("id") id: Int, @Query("api_key") apiKey: String): Call<Series>
+
     @POST("Series")
-    fun addSeriesToMySeries(@Body series: Series) : Call<SeriesResponse>
+    fun addSeriesToMySeries(@Body series: SimpleSeries) : Call<SeriesResponse>
 
     @POST("Users/Login")
     fun login(@Body user: User): Call<User>

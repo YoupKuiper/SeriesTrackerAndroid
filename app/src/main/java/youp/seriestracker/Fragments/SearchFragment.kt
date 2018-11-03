@@ -8,67 +8,72 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_search.*
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_search.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 import youp.seriestracker.R
 import youp.seriestracker.activities.DetailActivity
-import youp.seriestracker.activities.MainActivity
 import youp.seriestracker.adapters.SeriesAdapter
-import youp.seriestracker.models.Series
-import youp.seriestracker.models.SeriesResponse
+import youp.seriestracker.models.SimpleSeriesResponse
+import youp.seriestracker.utilities.config
 import youp.seriestracker.webservices.APIService
 import youp.seriestracker.webservices.RetrofitClient
 
 class SearchFragment : Fragment() {
 
     var seriesList: ListView? = null
+    lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_search, container, false)
+        val gson = Gson()
+        progressBar = rootView.progressBar
+        progressBar.visibility = View.GONE
+        seriesList = rootView.searchSeriesList
 
-        seriesList = rootView.seriesList
-
-        rootView.seriesList.onItemClickListener = object : AdapterView.OnItemClickListener {
+        rootView.searchSeriesList.onItemClickListener = object : AdapterView.OnItemClickListener {
 
             override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val series = rootView.seriesList.getItemAtPosition(position)
+                val series = rootView.searchSeriesList.getItemAtPosition(position)
+
+                //Turn series into json string
+                val seriesString = gson.toJson(series)
 
                 //Go to detail activity, pass clicked item
                 val intent = Intent(context, DetailActivity::class.java).apply {
-                    putExtra("SERIES", series as Series)
-                    val activity = activity as MainActivity
-                    putIntegerArrayListExtra("MY_SERIES_IDS", activity.mySeriesIds)
+                    putExtra("SERIES", seriesString)
                 }
                 startActivity(intent)
             }
         }
-
         return rootView
     }
 
     fun searchSeries(searchString: String){
         val retrofit = RetrofitClient.client
         val service = retrofit.create(APIService::class.java)
+        progressBar.visibility = View.VISIBLE
 
-        val call = service.searchByName(searchString)
-        call.enqueue(object : Callback<SeriesResponse> {
-            override fun onResponse(call: Call<SeriesResponse>?, response: Response<SeriesResponse>?) {
-
+        val call = service.searchByName(config.API_KEY, searchString)
+        call.enqueue(object : Callback<SimpleSeriesResponse> {
+            override fun onResponse(call: Call<SimpleSeriesResponse>?, response: Response<SimpleSeriesResponse>?) {
+                progressBar.visibility = View.GONE
                 if (response != null && response.isSuccessful) {
+                    //Might need to parse the non detailed series response to a detailed series response
                     seriesList!!.adapter = SeriesAdapter(activity!!.applicationContext, response.body()?.series)
                 } else {
-                    Toast.makeText(context, "No Series Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Series Found", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<SeriesResponse>?, t: Throwable?) {
+            override fun onFailure(call: Call<SimpleSeriesResponse>?, t: Throwable?) {
+                progressBar.visibility = View.GONE
                 Toast.makeText(context, t.toString(), Toast.LENGTH_LONG).show();
             }
         })

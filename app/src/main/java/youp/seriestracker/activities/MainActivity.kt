@@ -1,27 +1,22 @@
 package youp.seriestracker.activities
 
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
-import android.content.Context
 import android.app.SearchManager
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.widget.SearchView
+import com.evernote.android.job.JobManager
 import kotlinx.android.synthetic.main.activity_main.*
-import youp.seriestracker.R
-import youp.seriestracker.notificationservice.NotificationJobService
-import java.util.*
 import youp.seriestracker.Fragments.HomeFragment
 import youp.seriestracker.Fragments.SearchFragment
 import youp.seriestracker.Fragments.SettingsFragment
-import android.widget.SearchView
-import kotlin.collections.ArrayList
+import youp.seriestracker.R
 import youp.seriestracker.notificationservice.DemoJobCreator
-import com.evernote.android.job.JobManager
 import youp.seriestracker.notificationservice.MyDailyJob
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -41,11 +37,20 @@ class MainActivity : AppCompatActivity() {
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         transaction.add(R.id.container, mainFragment, "HOME_FRAGMENT")
-        transaction.addToBackStack(null)
         transaction.commit()
 
         JobManager.create(this).addJobCreator(DemoJobCreator())
         MyDailyJob.schedule()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        //If homefragment is visible, refresh it
+        val homeFragment = supportFragmentManager.findFragmentByTag("HOME_FRAGMENT")
+        if(homeFragment is HomeFragment){
+            homeFragment.refresh()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -85,35 +90,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-
-
-    fun getCurrentlyVisibleFragmentTag(){
-
-    }
-
-    fun scheduleJob(){
-
-        val componentName = ComponentName(this, NotificationJobService::class.java)
-        val info = JobInfo.Builder(123, componentName)
-                .setPersisted(true)
-                .setPeriodic(24 * 60 * 60 * 1000L)
-                .build()
-
-        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val resultCode = jobScheduler.schedule(info)
-        if(resultCode == JobScheduler.RESULT_SUCCESS){
-            println("Job Scheduled...")
-        } else{
-            println("Job Scheduling Failed...")
-        }
-    }
-
-    fun cancelJob(){
-        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        jobScheduler.cancel(123)
-        println("Job cancelled")
-    }
-
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
@@ -122,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
                 transaction.replace(R.id.container, mainFragment, "HOME_FRAGMENT")
-                transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -131,7 +106,6 @@ class MainActivity : AppCompatActivity() {
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
                 transaction.replace(R.id.container, searchFragment, "SEARCH_FRAGMENT")
-                transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -140,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                 val manager = supportFragmentManager
                 val transaction = manager.beginTransaction()
                 transaction.replace(R.id.container, settingsFragment, "SETTINGS_FRAGMENT")
-                transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }

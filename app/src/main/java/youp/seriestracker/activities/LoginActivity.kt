@@ -1,14 +1,13 @@
 package youp.seriestracker.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import youp.seriestracker.Models.User
 import youp.seriestracker.R
-import youp.seriestracker.models.Series
 import youp.seriestracker.webservices.APIService
 import youp.seriestracker.webservices.RetrofitClient
 
