@@ -15,6 +15,7 @@ import youp.seriestracker.Fragments.SettingsFragment
 import youp.seriestracker.R
 import youp.seriestracker.notificationservice.DemoJobCreator
 import youp.seriestracker.notificationservice.MyDailyJob
+import youp.seriestracker.notificationservice.RefreshSeriesJob
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         JobManager.create(this).addJobCreator(DemoJobCreator())
         MyDailyJob.schedule()
+        RefreshSeriesJob.schedule()
     }
 
     override fun onRestart() {

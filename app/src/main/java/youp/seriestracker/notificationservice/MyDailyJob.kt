@@ -81,6 +81,40 @@ class MyDailyJob : DailyJob() {
                     //Send notification
                     notificationManager.notify(i, notification)
                 }
+            }else{
+                //Test to create a notification every time regardless of if theres any series airing today
+                val CHANNEL_ID = "test"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //Create notification channel
+                    val context = getContext()
+                    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                    val importance = NotificationManager.IMPORTANCE_HIGH
+
+                    val notificationChannel = NotificationChannel(CHANNEL_ID, "seriesTrackerNotificationChannel", importance)
+                    notificationChannel.enableVibration(true)
+                    notificationChannel.setShowBadge(true)
+                    notificationChannel.enableLights(true)
+                    notificationChannel.lightColor = Color.parseColor("#e8334a")
+                    notificationChannel.description = "test"
+                    notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                    notificationManager.createNotificationChannel(notificationChannel)
+                }
+
+                //Get notification manager
+                var notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                var mBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_home_black_24dp)
+                        .setContentTitle("No series airing today")
+                        .setContentText("There are no series airing today")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                //Create notification
+                var notification = mBuilder.build()
+
+                //Send notification
+                notificationManager.notify(0, notification)
             }
         }).start()
         return DailyJobResult.SUCCESS
