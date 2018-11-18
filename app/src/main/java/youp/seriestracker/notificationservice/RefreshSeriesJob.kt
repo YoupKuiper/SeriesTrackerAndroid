@@ -50,7 +50,7 @@ class RefreshSeriesJob : Job() {
             var notification = mBuilder.build()
 
             //Send notification
-            notificationManager.notify(0, notification)
+            notificationManager.notify(999, notification)
         }).start()
         return Job.Result.SUCCESS
     }
@@ -62,7 +62,7 @@ class RefreshSeriesJob : Job() {
 
         fun schedule() {
             // schedule between 10 and 11 AM
-            println("Scheduling job between 2 and 3 days")
+            println("Scheduling job every 2 or 3 days")
             JobRequest.Builder(TAG)
                     .setExecutionWindow(TimeUnit.DAYS.toMillis(2), TimeUnit.DAYS.toMillis(3))
                     .build()
