@@ -9,6 +9,7 @@ class DemoJobCreator : JobCreator {
         println("creating demojobcreator")
         when (tag) {
             MyDailyJob.TAG -> return MyDailyJob()
+            RefreshSeriesJob.TAG -> return RefreshSeriesJob()
             else -> return null
         }
     }

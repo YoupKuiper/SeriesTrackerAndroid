@@ -13,9 +13,6 @@ interface APIService {
     @GET("search/tv")
     fun searchByName(@Query("api_key") apiKey: String, @Query("query",encoded = true) query: String) : Call<SimpleSeriesResponse>
 
-//    @GET("Series/GetDetailsByName")
-//    fun searchByName(@Query("name") name : String): Call<SeriesResponse>
-
     @GET("Series")
     fun listSeries(): Call<SeriesResponse>
 
