@@ -116,7 +116,7 @@ class RefreshSeriesJob : Job() {
 //                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
 //                    .build()
 //                    .schedule()
-            DailyJob.scheduleAsync(JobRequest.Builder(MyDailyJob.TAG).setRequiredNetworkType(JobRequest.NetworkType.CONNECTED), TimeUnit.HOURS.toMillis(10), TimeUnit.HOURS.toMillis(11))
+            DailyJob.scheduleAsync(JobRequest.Builder(MyDailyJob.TAG), TimeUnit.HOURS.toMillis(10), TimeUnit.HOURS.toMillis(11))
 
 //            DailyJob.startNowOnce(JobRequest.Builder(TAG))
         }

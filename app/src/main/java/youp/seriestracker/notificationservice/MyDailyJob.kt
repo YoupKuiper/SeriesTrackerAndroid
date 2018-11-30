@@ -127,7 +127,7 @@ class MyDailyJob : DailyJob() {
         fun schedule() {
             // schedule between 10 and 11 AM
             println("Scheduling job between 10 and 11 AM")
-            DailyJob.scheduleAsync(JobRequest.Builder(TAG).setRequiredNetworkType(JobRequest.NetworkType.CONNECTED), TimeUnit.HOURS.toMillis(10), TimeUnit.HOURS.toMillis(11))
+            DailyJob.scheduleAsync(JobRequest.Builder(TAG), TimeUnit.HOURS.toMillis(10), TimeUnit.HOURS.toMillis(11))
 //            DailyJob.startNowOnce(JobRequest.Builder(TAG))
         }
     }
